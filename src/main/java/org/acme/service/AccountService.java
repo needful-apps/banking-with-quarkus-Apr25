@@ -1,6 +1,7 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.acme.AddAccountReply;
 import org.acme.AddAccountRequest;
 import org.acme.GetAccountReply;
@@ -13,6 +14,7 @@ import java.util.UUID;
 // ApplicationScoped bedeutet, dass die Klasse nur einmal instanziiert wird
 @ApplicationScoped
 public class AccountService {
+
     HashMap<String, Account> accounts = new HashMap<>();
 
     public AddAccountReply addAccountFromRequest(AddAccountRequest request) {
@@ -45,6 +47,13 @@ public class AccountService {
                 .build();
 
         return response;
+    }
+
+
+    public void changeAccountBalance(String id, double amount) {
+        var account = accounts.get(id);
+        account.changeBalance(amount);
+        accounts.put(id, account);
     }
 
 

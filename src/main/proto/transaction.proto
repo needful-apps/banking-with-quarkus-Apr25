@@ -2,31 +2,40 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "org.acme";
-option java_outer_classname = "TranscationGrpcProto";
+option java_outer_classname = "TransactionGrpcProto";
 
-package transcation;
+package transaction;
 
-service TranscationGrpc {
-  rpc AddTranscation (AddTranscationRequest) returns (AddTranscationReply) {}
-  rpc GetTranscation (GetTranscationRequest) returns (GetTranscationReply) {}
+service TransactionGrpc {
+  rpc AddTransaction (AddTransactionRequest) returns (AddTransactionReply) {}
+  rpc GetTransaction (GetTransactionRequest) returns (GetTransactionReply) {}
+  rpc GetAllTransaction (GetAllTransactionRequest) returns (GetAllTransactionReply) {}
+
 }
 
-message GetTranscationRequest {
+message GetTransactionRequest {
   string id = 1;
 }
 
-message GetTranscationReply {
+message GetTransactionReply {
   string sender = 1;
   string receiver = 2;
   double amount = 3;
 }
 
-message AddTranscationRequest {
+message AddTransactionRequest {
   string sender = 1;
   string receiver = 2;
   double amount = 3;
 }
 
-message AddTranscationReply {
+message AddTransactionReply {
   string id = 1;
+}
+
+message GetAllTransactionRequest {
+}
+
+message GetAllTransactionReply {
+  repeated GetTransactionReply transactions = 1;
 }

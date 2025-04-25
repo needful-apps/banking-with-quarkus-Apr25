@@ -28,4 +28,8 @@ public class Account {
     public double getBalance() {
         return balance;
     }
+
+    public void changeBalance(double amount) {
+        this.balance += amount;
+    }
 }
