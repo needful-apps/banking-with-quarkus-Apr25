@@ -2,53 +2,26 @@ package org.acme;
 
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
-import org.acme.model.Account;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import jakarta.inject.Inject;
+import org.acme.service.AccountService;
 
 @GrpcService
 public class AccountGrpcService implements AccountGrpc{
-    List<Account> accounts = new ArrayList<>();
+
+    // Inject bedeutet, dass die Klasse von Quarkus instanziiert wird
+    @Inject
+    AccountService accountService;
 
     @Override
     public Uni<AddAccountReply> addAccount(AddAccountRequest request) {
-        var id = UUID.randomUUID().toString();
+        var response = accountService.addAccountFromRequest(request);
 
-        var newIban = "CH"+ UUID.randomUUID()
-                .toString().replace("-", "")
-                .substring(0, 19);
-
-        Account newAccount =
-                new Account(id, newIban, request.getName()
-                        , request.getBalance());
-
-        accounts.add(newAccount);
-
-        AddAccountReply reply = AddAccountReply.newBuilder()
-                .setId(id)
-                .build();
-
-        return Uni.createFrom().item(reply);
+        return Uni.createFrom().item(response);
     }
 
     @Override
     public Uni<GetAccountReply> getAccount(GetAccountRequest request) {
-        var account = accounts.stream()
-                .filter(a -> a.getId().equals(request.getId()))
-                .findFirst()
-                .orElse(null);
-
-        if (account == null) {
-            return Uni.createFrom().failure(new RuntimeException("Account not found"));
-        }
-
-        var reply = GetAccountReply.newBuilder()
-                .setIban(account.getIban())
-                .setName(account.getName())
-                .setBalance(account.getBalance())
-                .build();
+        var reply = accountService.getAccountByRequest(request);
 
         return Uni.createFrom().item(reply);
     }
