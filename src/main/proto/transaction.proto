@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.acme";
+option java_outer_classname = "TranscationGrpcProto";
+
+package transcation;
+
+service TranscationGrpc {
+  rpc AddTranscation (AddTranscationRequest) returns (AddTranscationReply) {}
+  rpc GetTranscation (GetTranscationRequest) returns (GetTranscationReply) {}
+}
+
+message GetTranscationRequest {
+  string id = 1;
+}
+
+message GetTranscationReply {
+  string sender = 1;
+  string receiver = 2;
+  double amount = 3;
+}
+
+message AddTranscationRequest {
+  string sender = 1;
+  string receiver = 2;
+  double amount = 3;
+}
+
+message AddTranscationReply {
+  string id = 1;
+}
